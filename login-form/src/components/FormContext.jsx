@@ -40,9 +40,9 @@ export const FormProvider = ({ children }) => {
       .catch((error) => {
         console.warn("ivyko klaida:", error);
         const { status, data } = error.response;
-        if (status === 400) {
-          console.log("data ===", data);
-          setErrorMsg(data);
+        if (status) {
+          console.log("data ===", data.error);
+          setErrorMsg(data.error);
         }
       });
   };
@@ -50,13 +50,13 @@ export const FormProvider = ({ children }) => {
   const handleRegisterSubimt = (e) => {
     e.preventDefault();
     if (password === reapeatPassword) {
-      const formatedDate = new Date().toLocaleDateString("lt-LT", {
-        dateStyle: "short",
-      });
+      //   const formatedDate = new Date().toLocaleDateString("lt-LT", {
+      //     dateStyle: "short",
+      //   });
       const newUser = {
         email: email,
         password: password,
-        created_at: formatedDate,
+        // created_at: formatedDate,
       };
       axios
         .post(REGISTER_URL, newUser)
@@ -67,6 +67,7 @@ export const FormProvider = ({ children }) => {
             setPassword("");
             setRegister(false);
             setSuccessMsg("Your account is created!");
+            setErrorMsg("");
           }
         })
         .catch((error) => {
@@ -74,7 +75,7 @@ export const FormProvider = ({ children }) => {
           const { status, data } = error.response;
           if (status === 500) {
             console.log("data ===", data);
-            setErrorMsg(data);
+            setErrorMsg(data.error);
           }
         });
     } else {
